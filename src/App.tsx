@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ChartSection } from "./sections/ChartSection/ChartSection";
+import { generateChartData } from "./data/dates";
 
 const MasterWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
@@ -28,6 +29,7 @@ const Section6 = styled.div`
     background-color: red;
 `;
 
+console.log(generateChartData(40, "month"));
 export const App = () => {
     return (
         <MasterWrapper>

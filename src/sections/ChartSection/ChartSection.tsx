@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
+import { generateChartData } from "../../data/dates";
 
 const Chart = styled.div`
     height: 100%;
@@ -38,20 +39,21 @@ const RateChange = styled.p`
 const rateChange = "+";
 
 export const ChartSection = () => {
+    const [dates, rates] = generateChartData(40, "month");
     const chartRef = useRef(null);
     useEffect(() => {
         const chart = echarts.init(chartRef.current);
         const options = {
             xAxis: {
                 type: "category",
-                data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                data: dates,
             },
             yAxis: {
                 type: "value",
             },
             series: [
                 {
-                    data: [150, 230, 224, 218, 135, 147, 260],
+                    data: rates,
                     type: "line",
                 },
             ],
