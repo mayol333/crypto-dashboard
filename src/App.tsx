@@ -29,7 +29,7 @@ const Section6 = styled.div`
     background-color: red;
 `;
 
-console.log(generateChartData(40, "month"));
+console.log(generateChartData("month"));
 export const App = () => {
     return (
         <MasterWrapper>

@@ -1,9 +1,9 @@
 import * as echarts from "echarts";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
-import { generateChartData } from "../../data/dates";
+import { Period, generateChartData } from "../../data/dates";
 
 const Chart = styled.div`
     height: 100%;
@@ -39,14 +39,19 @@ const RateChange = styled.p`
 const rateChange = "+";
 
 export const ChartSection = () => {
-    const [dates, rates] = generateChartData(40, "month");
+    const [period, setPeriod] = useState<Period>("threeDays");
+    const [dates, rates] = generateChartData(period);
+    console.log(rates.length);
     const chartRef = useRef(null);
+    const handleButtons = (value: Period) => {
+        setPeriod(value);
+    };
     useEffect(() => {
         const chart = echarts.init(chartRef.current);
         const options = {
             xAxis: {
                 type: "category",
-                data: dates.reverse(),
+                data: [...dates].reverse(),
             },
             yAxis: {
                 type: "value",
@@ -62,7 +67,7 @@ export const ChartSection = () => {
         return () => {
             chart.dispose();
         };
-    }, []);
+    }, [dates, rates]);
     return (
         <Container>
             <Wrapper>
@@ -82,7 +87,10 @@ export const ChartSection = () => {
                         <span>{rateChange}</span>12,23%
                     </RateChange>
                 </PriceWrapper>
-                <TimePeriodSelector />
+                <TimePeriodSelector
+                    handleButtons={handleButtons}
+                    period={period}
+                />
             </Wrapper>
             <Chart ref={chartRef}></Chart>
         </Container>
