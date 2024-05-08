@@ -46,7 +46,7 @@ export const ChartSection = () => {
         const options = {
             xAxis: {
                 type: "category",
-                data: dates,
+                data: dates.reverse(),
             },
             yAxis: {
                 type: "value",
