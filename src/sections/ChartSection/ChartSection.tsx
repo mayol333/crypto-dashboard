@@ -32,16 +32,24 @@ const Rate = styled.p`
     font-size: ${({ theme }) => theme.fonts.size.xxl * 2}px;
 `;
 
-const RateChange = styled.p`
-    color: ${({ theme }) => theme.colors.increase};
+const RateChange = styled.p<{ $isPercentagePositive: boolean }>`
+    color: ${({ theme, $isPercentagePositive }) =>
+        $isPercentagePositive ? theme.colors.increase : theme.colors.decrease};
     font-weight: bold;
 `;
-const rateChange = "+";
+
+const calculateRate = (rates: number[]) => {
+    const lastRate = rates.at(-1) ?? 0;
+    const firstRate = rates.at(0) ?? 0;
+    const difference = lastRate - firstRate;
+    const sum = (difference / firstRate) * 100;
+    return sum.toFixed(2);
+};
 
 export const ChartSection = () => {
     const [period, setPeriod] = useState<Period>("threeDays");
     const [dates, rates] = generateChartData(period);
-    console.log(rates.length);
+    const [rate, setRate] = useState(0);
     const chartRef = useRef(null);
     const handleButtons = (value: Period) => {
         setPeriod(value);
@@ -68,6 +76,24 @@ export const ChartSection = () => {
             chart.dispose();
         };
     }, [dates, rates]);
+    const currentRate = rates.at(-1) ?? 0;
+    const rateDifferencePercentage = calculateRate(rates);
+    const isPercentagePositive = Number(rateDifferencePercentage) > 0;
+    const rateSign = isPercentagePositive ? "+" : "";
+    useEffect(() => {
+        setRate(currentRate);
+        setInterval(() => {
+            const difference = Math.floor(Math.random() * 101);
+            const directionOfRate = Math.random() < 0.5 ? 1 : -1;
+            // const calculatedRate = currentRate + difference * directionOfRate;
+            setRate((prevRate) => {
+                if (directionOfRate > 0) {
+                    return prevRate + difference;
+                } else return prevRate - difference;
+            });
+        }, 10000);
+    }, [currentRate]);
+    console.log(rate);
     return (
         <Container>
             <Wrapper>
@@ -82,9 +108,12 @@ export const ChartSection = () => {
                     ]}
                 ></Select>
                 <PriceWrapper>
-                    <Rate>$58.144,80</Rate>
-                    <RateChange>
-                        <span>{rateChange}</span>12,23%
+                    <Rate>${rate}</Rate>
+                    <RateChange $isPercentagePositive={isPercentagePositive}>
+                        <span>
+                            {rateSign}
+                            {rateDifferencePercentage}%
+                        </span>
                     </RateChange>
                 </PriceWrapper>
                 <TimePeriodSelector

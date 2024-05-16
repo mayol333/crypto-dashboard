@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 
 export type Period = keyof typeof secondsInSelectedNumberOfDays;
-const ratesSeed = 40;
+const ratesSeed = 200;
 
 const secondsInSelectedNumberOfDays = {
     month: 259200,
@@ -35,8 +35,9 @@ export const generateRates = (seed: number, count: number): number[] => {
     for (let i = 0; i < count; i++) {
         const difference = Math.floor(Math.random() * 101);
         const directionOfRate = Math.random() < 0.5 ? 1 : -1;
-        arrayOfRates.push(nextRate + difference * directionOfRate);
-        nextRate = nextRate + difference * directionOfRate;
+        const calculatedRate = nextRate + difference * directionOfRate;
+        arrayOfRates.push(calculatedRate < 0 ? 0 : calculatedRate);
+        nextRate = calculatedRate < 0 ? 0 : calculatedRate;
     }
     return arrayOfRates;
 };
@@ -44,7 +45,7 @@ const initialRates = generateRates(
     ratesSeed,
     secondsInSelectedNumberOfDays.month
 );
-export const generateChartData = (period: Period) => {
+export const generateChartData = (period: Period): [string[], number[]] => {
     if (period === "oneDay") {
         const magicNumber = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
         const currentDate = new Date().getTime();
