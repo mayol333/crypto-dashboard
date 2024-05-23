@@ -1,31 +1,30 @@
 import { format } from "date-fns";
 
 export type Period = keyof typeof secondsInSelectedNumberOfDays;
-const ratesSeed = 200;
+export const ratesSeed = 200;
 
-const secondsInSelectedNumberOfDays = {
+export const secondsInSelectedNumberOfDays = {
     month: 259200,
     week: 60480,
     fiveDays: 43200,
     threeDays: 25920,
     oneDay: 0,
 };
-export const generateDates = (period: Period) => {
+
+export const generateDates = () => {
     const arrayOfDates = [];
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 1);
+    startDate.setHours(startDate.getHours() + 2);
     const currentDate = new Date().getTime();
-    let nextDate = currentDate;
-    for (let i = 0; i < secondsInSelectedNumberOfDays[period]; i++) {
-        arrayOfDates.push(format(nextDate - 10000, "dd:MM:yyyy - kk:mm:ss"));
-        nextDate = nextDate - 10000;
-    }
-    return arrayOfDates;
-};
-export const generateDayDates = (magicNumber: number, currentDate: number) => {
-    const arrayOfDates = [];
-    let nextDate = currentDate;
-    for (let i = 0; i < Math.round((currentDate - magicNumber) / 10000); i++) {
-        arrayOfDates.push(format(nextDate - 10000, "dd:MM:yyyy - kk:mm:ss"));
-        nextDate = nextDate - 10000;
+    let nextDate = startDate.getTime();
+    for (
+        let i = 0;
+        i < Math.round((currentDate - startDate.getTime()) / 10000);
+        i++
+    ) {
+        arrayOfDates.push(format(nextDate + 10000, "dd:MM:yyyy - kk:mm:ss"));
+        nextDate = nextDate + 10000;
     }
     return arrayOfDates;
 };
@@ -41,24 +40,18 @@ export const generateRates = (seed: number, count: number): number[] => {
     }
     return arrayOfRates;
 };
-const initialRates = generateRates(
-    ratesSeed,
-    secondsInSelectedNumberOfDays.month
-);
-export const generateChartData = (period: Period): [string[], number[]] => {
+export const generateChartData = (
+    period: Period,
+    initialRates: number[],
+    initialDates: string[]
+): [string[], number[]] => {
     if (period === "oneDay") {
-        const magicNumber = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+        const startDate = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
         const currentDate = new Date().getTime();
-        return [
-            generateDayDates(magicNumber, currentDate),
-            initialRates.slice(
-                259200 - Math.round((currentDate - magicNumber) / 10000)
-            ),
-        ];
+        const datesSpan =
+            259200 - Math.round((currentDate - startDate) / 10000);
+        return [initialDates.slice(datesSpan), initialRates.slice(datesSpan)];
     }
-
-    return [
-        generateDates(period),
-        initialRates.slice(259200 - secondsInSelectedNumberOfDays[period]),
-    ];
+    const datesSpan = 259200 - secondsInSelectedNumberOfDays[period];
+    return [initialDates.slice(datesSpan), initialRates.slice(datesSpan)];
 };

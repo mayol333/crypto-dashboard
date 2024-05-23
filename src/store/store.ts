@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import buttonReducer from "./buttonSlice";
-export const store = configureStore({ reducer: { button: buttonReducer } });
+import dataReducer from "./dataSlice";
+export const store = configureStore({
+    reducer: { button: buttonReducer, data: dataReducer },
+});
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

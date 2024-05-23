@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
 import { Period, generateChartData } from "../../data/dates";
+import { format } from "date-fns";
+import axios from "axios";
 
 const Chart = styled.div`
     height: 100%;
@@ -47,19 +49,40 @@ const calculateRate = (rates: number[]) => {
 };
 
 export const ChartSection = () => {
+    const [initialDates, setInitialDates] = useState<string[]>([]);
+    const [initialRates, setInitialRates] = useState<number[]>([]);
     const [period, setPeriod] = useState<Period>("threeDays");
-    const [dates, rates] = generateChartData(period);
-    const [rate, setRate] = useState(0);
+    const [dates, rates] = generateChartData(
+        period,
+        initialRates,
+        initialDates
+    );
     const chartRef = useRef(null);
     const handleButtons = (value: Period) => {
         setPeriod(value);
     };
     useEffect(() => {
+        const getInitialData = async () => {
+            try {
+                const { data } = await axios.get("/initial_data");
+                const { dates, rates } = data;
+                setInitialDates(dates);
+                setInitialRates(rates);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getInitialData();
+    }, []);
+    useEffect(() => {
         const chart = echarts.init(chartRef.current);
         const options = {
+            tooltip: {
+                trigger: "axis",
+            },
             xAxis: {
                 type: "category",
-                data: [...dates].reverse(),
+                data: dates,
             },
             yAxis: {
                 type: "value",
@@ -81,19 +104,27 @@ export const ChartSection = () => {
     const isPercentagePositive = Number(rateDifferencePercentage) > 0;
     const rateSign = isPercentagePositive ? "+" : "";
     useEffect(() => {
-        setRate(currentRate);
         setInterval(() => {
             const difference = Math.floor(Math.random() * 101);
             const directionOfRate = Math.random() < 0.5 ? 1 : -1;
-            // const calculatedRate = currentRate + difference * directionOfRate;
-            setRate((prevRate) => {
-                if (directionOfRate > 0) {
-                    return prevRate + difference;
-                } else return prevRate - difference;
+            setInitialRates((prevState) => {
+                const lastRate = prevState.at(-1) ?? 0;
+                const updatedLastRate =
+                    directionOfRate > 0
+                        ? lastRate + difference
+                        : lastRate - difference;
+                const updatedRates = prevState.slice(1);
+                updatedRates.push(updatedLastRate);
+                return updatedRates;
+            });
+            setInitialDates((prevDate) => {
+                const updatedDates = prevDate.slice(1);
+                const currentDate = new Date().getTime();
+                updatedDates.push(format(currentDate, "dd:MM:yyyy - kk:mm:ss"));
+                return updatedDates;
             });
         }, 10000);
-    }, [currentRate]);
-    console.log(rate);
+    }, []);
     return (
         <Container>
             <Wrapper>
@@ -108,7 +139,7 @@ export const ChartSection = () => {
                     ]}
                 ></Select>
                 <PriceWrapper>
-                    <Rate>${rate}</Rate>
+                    <Rate>${currentRate}</Rate>
                     <RateChange $isPercentagePositive={isPercentagePositive}>
                         <span>
                             {rateSign}
