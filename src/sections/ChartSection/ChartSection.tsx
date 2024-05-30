@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
 import { Period, generateChartData } from "../../data/dates";
-import { format } from "date-fns";
-import axios from "axios";
+import { getInitialData } from "../../store/dataThunk";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { updateDates, updateRates } from "../../store/dataSlice";
 
 const Chart = styled.div`
     height: 100%;
@@ -49,8 +50,12 @@ const calculateRate = (rates: number[]) => {
 };
 
 export const ChartSection = () => {
-    const [initialDates, setInitialDates] = useState<string[]>([]);
-    const [initialRates, setInitialRates] = useState<number[]>([]);
+    const dispatch = useAppDispatch();
+    const { dates: initialDates, rates: initialRates } = useAppSelector(
+        ({ data }) => data
+    );
+    // const [initialDates, setInitialDates] = useState<string[]>([]);
+    // const [initialRates, setInitialRates] = useState<number[]>([]);
     const [period, setPeriod] = useState<Period>("threeDays");
     const [dates, rates] = generateChartData(
         period,
@@ -62,18 +67,8 @@ export const ChartSection = () => {
         setPeriod(value);
     };
     useEffect(() => {
-        const getInitialData = async () => {
-            try {
-                const { data } = await axios.get("/initial_data");
-                const { dates, rates } = data;
-                setInitialDates(dates);
-                setInitialRates(rates);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getInitialData();
-    }, []);
+        dispatch(getInitialData());
+    }, [dispatch]);
     useEffect(() => {
         const chart = echarts.init(chartRef.current);
         const options = {
@@ -103,30 +98,23 @@ export const ChartSection = () => {
     const rateDifferencePercentage = calculateRate(rates);
     const isPercentagePositive = Number(rateDifferencePercentage) > 0;
     const rateSign = isPercentagePositive ? "+" : "";
-    useEffect(() => {
-        setInterval(() => {
-            const difference = Math.floor(Math.random() * 101);
-            const directionOfRate = Math.random() < 0.5 ? 1 : -1;
-            setInitialRates((prevState) => {
-                const lastRate = prevState.at(-1) ?? 0;
-                const updatedLastRate =
-                    directionOfRate > 0
-                        ? lastRate + difference
-                        : lastRate - difference;
-                const updatedRates = prevState.slice(1);
-                updatedRates.push(updatedLastRate);
-                return updatedRates;
-            });
-            setInitialDates((prevDate) => {
-                const updatedDates = prevDate.slice(1);
-                const currentDate = new Date().getTime();
-                updatedDates.push(format(currentDate, "dd:MM:yyyy - kk:mm:ss"));
-                return updatedDates;
-            });
-        }, 10000);
-    }, []);
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         console.log("check");
+    //         dispatch(updateDates());
+    //         dispatch(updateRates());
+    //     }, 10000);
+    // }, [dispatch]);
     return (
         <Container>
+            <button
+                onClick={() => {
+                    dispatch(updateDates());
+                    dispatch(updateRates());
+                }}
+            >
+                dupa
+            </button>
             <Wrapper>
                 <Select
                     placeholder="Currency"
