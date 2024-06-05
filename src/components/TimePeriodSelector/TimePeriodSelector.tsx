@@ -1,15 +1,19 @@
 import styled from "styled-components";
 import { Button } from "../../ui/Button/Button";
-import { TimePeriodSelectorProps } from "./types";
+import { Period } from "../../data/dates";
+import { setPeriod } from "../../store/dataSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 
 const Container = styled.div`
     display: flex;
     gap: 10px;
 `;
-export const TimePeriodSelector = ({
-    handleButtons,
-    period,
-}: TimePeriodSelectorProps) => {
+export const TimePeriodSelector = () => {
+    const dispatch = useAppDispatch();
+    const { period } = useAppSelector(({ data }) => data);
+    const handleButtons = (value: Period) => {
+        dispatch(setPeriod(value));
+    };
     return (
         <Container>
             <Button

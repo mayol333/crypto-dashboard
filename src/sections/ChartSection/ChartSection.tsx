@@ -1,12 +1,12 @@
 import * as echarts from "echarts";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
-import { Period, generateChartData } from "../../data/dates";
+import { generateChartData } from "../../data/dates";
 import { getInitialData } from "../../store/dataThunk";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { updateDates, updateRates } from "../../store/dataSlice";
+import { removeFirst, updateDates, updateRates } from "../../store/dataSlice";
 
 const Chart = styled.div`
     height: 100%;
@@ -51,21 +51,17 @@ const calculateRate = (rates: number[]) => {
 
 export const ChartSection = () => {
     const dispatch = useAppDispatch();
-    const { dates: initialDates, rates: initialRates } = useAppSelector(
-        ({ data }) => data
-    );
-    // const [initialDates, setInitialDates] = useState<string[]>([]);
-    // const [initialRates, setInitialRates] = useState<number[]>([]);
-    const [period, setPeriod] = useState<Period>("threeDays");
+    const {
+        dates: initialDates,
+        rates: initialRates,
+        period,
+    } = useAppSelector(({ data }) => data);
     const [dates, rates] = generateChartData(
         period,
         initialRates,
         initialDates
     );
     const chartRef = useRef(null);
-    const handleButtons = (value: Period) => {
-        setPeriod(value);
-    };
     useEffect(() => {
         dispatch(getInitialData());
     }, [dispatch]);
@@ -98,23 +94,15 @@ export const ChartSection = () => {
     const rateDifferencePercentage = calculateRate(rates);
     const isPercentagePositive = Number(rateDifferencePercentage) > 0;
     const rateSign = isPercentagePositive ? "+" : "";
-    // useEffect(() => {
-    //     setInterval(() => {
-    //         console.log("check");
-    //         dispatch(updateDates());
-    //         dispatch(updateRates());
-    //     }, 10000);
-    // }, [dispatch]);
+    useEffect(() => {
+        setInterval(() => {
+            dispatch(updateDates());
+            dispatch(updateRates());
+            dispatch(removeFirst());
+        }, 10000);
+    }, [dispatch]);
     return (
         <Container>
-            <button
-                onClick={() => {
-                    dispatch(updateDates());
-                    dispatch(updateRates());
-                }}
-            >
-                dupa
-            </button>
             <Wrapper>
                 <Select
                     placeholder="Currency"
@@ -135,10 +123,7 @@ export const ChartSection = () => {
                         </span>
                     </RateChange>
                 </PriceWrapper>
-                <TimePeriodSelector
-                    handleButtons={handleButtons}
-                    period={period}
-                />
+                <TimePeriodSelector />
             </Wrapper>
             <Chart ref={chartRef}></Chart>
         </Container>

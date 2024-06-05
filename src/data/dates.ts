@@ -11,22 +11,15 @@ export const secondsInSelectedNumberOfDays = {
     oneDay: 0,
 };
 
-export const generateDates = () => {
+export const generateDates = (count: number) => {
     const arrayOfDates = [];
     const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - 1);
-    startDate.setHours(startDate.getHours() + 2);
-    const currentDate = new Date().getTime();
     let nextDate = startDate.getTime();
-    for (
-        let i = 0;
-        i < Math.round((currentDate - startDate.getTime()) / 10000);
-        i++
-    ) {
-        arrayOfDates.push(format(nextDate + 10000, "dd:MM:yyyy - kk:mm:ss"));
-        nextDate = nextDate + 10000;
+    for (let i = 0; i < count; i++) {
+        arrayOfDates.push(format(nextDate - 10000, "dd:MM:yyyy - kk:mm:ss"));
+        nextDate = nextDate - 10000;
     }
-    return arrayOfDates;
+    return [...arrayOfDates].reverse();
 };
 export const generateRates = (seed: number, count: number): number[] => {
     const arrayOfRates = [];

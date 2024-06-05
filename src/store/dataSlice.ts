@@ -1,40 +1,52 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { format } from "date-fns";
+import { Period } from "../data/dates";
 export interface DataState {
     dates: string[];
     rates: number[];
+    period: Period;
 }
-const initialState: DataState = { dates: [], rates: [] };
+const initialState: DataState = { dates: [], rates: [], period: "threeDays" };
 const dataSlice = createSlice({
     name: "data",
     initialState,
     reducers: {
-        setDates: (state, { payload }) => {
+        setDates: (state, { payload }: PayloadAction<string[]>) => {
             state.dates = payload;
         },
-        setRates: (state, { payload }) => {
+        setRates: (state, { payload }: PayloadAction<number[]>) => {
             state.rates = payload;
         },
         updateRates: (state) => {
             const lastRate = state.rates.at(-1) ?? 0;
-            console.log({ lastRate });
             const difference = Math.floor(Math.random() * 101);
             const directionOfRate = Math.random() < 0.5 ? 1 : -1;
             const updatedLastRate =
                 directionOfRate > 0
                     ? lastRate + difference
                     : lastRate - difference;
-            state.rates = [...state.rates.slice(1), updatedLastRate];
+            state.rates.push(updatedLastRate);
         },
         updateDates: (state) => {
             const currentDate = new Date().getTime();
-            state.dates = [
-                ...state.dates.slice(1),
-                format(currentDate, "dd:MM:yyyy - kk:mm:ss"),
-            ];
+            state.dates.push(format(currentDate, "dd:MM:yyyy - kk:mm:ss"));
+        },
+        removeFirst: (state) => {
+            state.dates.shift();
+            state.rates.shift();
+        },
+        setPeriod: (state, { payload }: PayloadAction<Period>) => {
+            state.period = payload;
         },
     },
 });
-export const { setDates, setRates, updateDates, updateRates } =
-    dataSlice.actions;
+
+export const {
+    setDates,
+    setRates,
+    updateDates,
+    updateRates,
+    removeFirst,
+    setPeriod,
+} = dataSlice.actions;
 export default dataSlice.reducer;

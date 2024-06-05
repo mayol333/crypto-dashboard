@@ -9,7 +9,7 @@ import {
 export const handlers = [
     http.get("/initial_data", () => {
         return HttpResponse.json({
-            dates: generateDates(),
+            dates: generateDates(secondsInSelectedNumberOfDays.month),
             rates: generateRates(
                 ratesSeed,
                 secondsInSelectedNumberOfDays.month
