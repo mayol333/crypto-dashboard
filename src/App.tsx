@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ChartSection } from "./sections/ChartSection/ChartSection";
+import { ListSection } from "./sections/ListSection/ListSection";
 
 const MasterWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
@@ -11,10 +12,6 @@ const MasterWrapper = styled.div`
     gap: 10px;
 `;
 
-const Section1 = styled.div``;
-const Section2 = styled.div`
-    background-color: red;
-`;
 const Section3 = styled.div`
     background-color: red;
 `;
@@ -31,10 +28,12 @@ const Section6 = styled.div`
 export const App = () => {
     return (
         <MasterWrapper>
-            <Section1>
+            <div>
                 <ChartSection />
-            </Section1>
-            <Section2></Section2>
+            </div>
+            <div>
+                <ListSection />
+            </div>
             <Section3></Section3>
             <Section4></Section4>
             <Section5></Section5>
