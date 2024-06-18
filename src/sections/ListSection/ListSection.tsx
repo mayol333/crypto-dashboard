@@ -9,11 +9,13 @@ const ListElement = styled.li`
     list-style-type: none;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 `;
 
 const Avatar = styled.img`
     width: 50px;
     height: 50px;
+    margin-right: 15px;
 `;
 
 const CurrencyName = styled.p`
@@ -22,9 +24,17 @@ const CurrencyName = styled.p`
 
 const Rate = styled.p``;
 
-const RateDirection = styled.div``;
+const RateDirection = styled.div`
+    display: flex;
+    align-items: center;
+    border: 2px solid ${({ theme }) => theme.colors.increase};
+    border-radius: 20px;
+    padding-inline: 5px;
+`;
 
-const RateChangeValue = styled.p``;
+const RateChangeValue = styled.p`
+    font-weight: bold;
+`;
 
 export const ListSection = () => {
     return (
@@ -36,14 +46,17 @@ export const ListSection = () => {
                     <Rate>$43,000</Rate>
                     <RateDirection>
                         <Icon type="upArrow" />
-                        <RateChangeValue></RateChangeValue>
+                        <RateChangeValue>13%</RateChangeValue>
                     </RateDirection>
                 </ListElement>
                 <ListElement>
                     <Avatar src="/images/ethereum.png" alt="" />
                     <CurrencyName>Ethereum</CurrencyName>
-                    <Rate></Rate>
-                    <RateDirection></RateDirection>
+                    <Rate>$12,000</Rate>
+                    <RateDirection>
+                        <Icon type="upArrow" />
+                        <RateChangeValue>5%</RateChangeValue>
+                    </RateDirection>
                 </ListElement>
             </List>
         </Wrapper>
