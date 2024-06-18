@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Button } from "../../ui/Button/Button";
 import { Period } from "../../data/dates";
-import { setPeriod } from "../../store/dataSlice";
+import { setPeriod } from "../../store/data/dataSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
 const Container = styled.div`

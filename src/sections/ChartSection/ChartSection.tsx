@@ -4,9 +4,13 @@ import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
 import { generateChartData } from "../../data/dates";
-import { getInitialData } from "../../store/dataThunk";
+import { getInitialData } from "../../store/data/dataThunk";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { removeFirst, updateDates, updateRates } from "../../store/dataSlice";
+import {
+    removeFirst,
+    updateDates,
+    updateRates,
+} from "../../store/data/dataSlice";
 
 const Chart = styled.div`
     height: 100%;

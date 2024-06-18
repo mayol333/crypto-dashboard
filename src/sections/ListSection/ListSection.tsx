@@ -1,15 +1,30 @@
 import styled from "styled-components";
 import { Icon } from "../../ui/Icon/Icon";
+import { useEffect } from "react";
+import { getInitialList } from "../../store/list/listThunk";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+    padding: 20px;
+`;
 
-const List = styled.ul``;
+const List = styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    height: 750px;
+`;
 
 const ListElement = styled.li`
     list-style-type: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    &:nth-child(odd) {
+        background-color: ${({ theme }) => theme.colors.backgrounds.listOdd};
+    }
+    padding: 15px;
 `;
 
 const Avatar = styled.img`
@@ -20,44 +35,66 @@ const Avatar = styled.img`
 
 const CurrencyName = styled.p`
     font-weight: bold;
+    width: 100px;
 `;
 
-const Rate = styled.p``;
+const Rate = styled.p`
+    width: 100px;
+`;
 
-const RateDirection = styled.div`
+const RateDirection = styled.div<{ $isRatePositive: boolean }>`
     display: flex;
     align-items: center;
-    border: 2px solid ${({ theme }) => theme.colors.increase};
+    border: 2px solid
+        ${({ theme, $isRatePositive }) =>
+            $isRatePositive ? theme.colors.increase : theme.colors.decrease};
     border-radius: 20px;
     padding-inline: 5px;
+    min-width: 70px;
 `;
 
 const RateChangeValue = styled.p`
     font-weight: bold;
 `;
-
 export const ListSection = () => {
+    const dispatch = useAppDispatch();
+    const { cryptoCurrencies } = useAppSelector(({ list }) => list);
+    useEffect(() => {
+        dispatch(getInitialList());
+    }, [dispatch]);
+
     return (
         <Wrapper>
             <List>
-                <ListElement>
-                    <Avatar src="/images/bitcoin.png" alt="" />
-                    <CurrencyName>Bitcoin</CurrencyName>
-                    <Rate>$43,000</Rate>
-                    <RateDirection>
-                        <Icon type="upArrow" />
-                        <RateChangeValue>13%</RateChangeValue>
-                    </RateDirection>
-                </ListElement>
-                <ListElement>
-                    <Avatar src="/images/ethereum.png" alt="" />
-                    <CurrencyName>Ethereum</CurrencyName>
-                    <Rate>$12,000</Rate>
-                    <RateDirection>
-                        <Icon type="upArrow" />
-                        <RateChangeValue>5%</RateChangeValue>
-                    </RateDirection>
-                </ListElement>
+                {cryptoCurrencies.map(
+                    ({
+                        avatar,
+                        currencyName,
+                        rate,
+                        isRatePositive,
+                        rateChangeValue,
+                    }) => {
+                        return (
+                            <ListElement>
+                                <Avatar src={avatar} alt="" />
+                                <CurrencyName>{currencyName}</CurrencyName>
+                                <Rate>{rate}</Rate>
+                                <RateDirection $isRatePositive={isRatePositive}>
+                                    <Icon
+                                        type={
+                                            isRatePositive
+                                                ? "upArrow"
+                                                : "downArrow"
+                                        }
+                                    />
+                                    <RateChangeValue>
+                                        {rateChangeValue}
+                                    </RateChangeValue>
+                                </RateDirection>
+                            </ListElement>
+                        );
+                    }
+                )}
             </List>
         </Wrapper>
     );

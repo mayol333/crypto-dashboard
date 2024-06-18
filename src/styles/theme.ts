@@ -7,7 +7,7 @@ export const theme = {
         increase: "#10704b",
         borderColor: "#dedfe1",
         gray: "#dedfe1",
-        backgrounds: { input: "#eae9e9" },
+        backgrounds: { input: "#eae9e9", listOdd: "#e2e2e2" },
         primary: { red: "#C67575", navy: "#2E3549" },
         fonts: { light: "#B4B4C1", white: "#FFFDFD", dark: "#071124" },
     },

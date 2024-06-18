@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { format } from "date-fns";
-import { Period } from "../data/dates";
+import { Period } from "../../data/dates";
 export interface DataState {
     dates: string[];
     rates: number[];
