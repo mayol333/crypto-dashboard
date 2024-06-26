@@ -10,7 +10,7 @@ const cryptoCurrency = [
     {
         avatar: "/images/bitcoin.png",
         currencyName: "Bitcoin",
-        rate: "$14,000",
+        rate: "$14000",
         isRatePositive: true,
         rateChangeValue: "14%",
         id: 0,
@@ -18,7 +18,7 @@ const cryptoCurrency = [
     {
         avatar: "/images/ethereum.png",
         currencyName: "Ethereum",
-        rate: "$8,000",
+        rate: "$8000",
         isRatePositive: false,
         rateChangeValue: "14%",
         id: 1,
@@ -34,7 +34,7 @@ const cryptoCurrency = [
     {
         avatar: "/images/BNB.png",
         currencyName: "BNB",
-        rate: "$9,000",
+        rate: "$9000",
         isRatePositive: false,
         rateChangeValue: "-19%",
         id: 3,
@@ -42,7 +42,7 @@ const cryptoCurrency = [
     {
         avatar: "/images/solana.png",
         currencyName: "Solana",
-        rate: "$29,000",
+        rate: "$29000",
         isRatePositive: true,
         rateChangeValue: "50%",
         id: 4,

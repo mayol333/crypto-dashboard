@@ -1,6 +1,5 @@
 import * as echarts from "echarts";
 import { useEffect, useRef } from "react";
-import styled from "styled-components";
 import { TimePeriodSelector } from "../../components/TimePeriodSelector/TimePeriodSelector";
 import { Select } from "../../ui/Select/Select";
 import { generateChartData } from "../../data/dates";
@@ -11,39 +10,14 @@ import {
     updateDates,
     updateRates,
 } from "../../store/data/dataSlice";
-
-const Chart = styled.div`
-    height: 100%;
-    width: 100%;
-`;
-const Container = styled.div`
-    height: 100%;
-    width: 100%;
-    padding: ${({ theme }) => theme.gridUnit * 4}px;
-`;
-
-const Wrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const PriceWrapper = styled.div`
-    display: flex;
-    align-items: end;
-    flex-direction: column;
-`;
-
-const Rate = styled.p`
-    font-weight: bold;
-    font-size: ${({ theme }) => theme.fonts.size.xxl * 2}px;
-`;
-
-const RateChange = styled.p<{ $isPercentagePositive: boolean }>`
-    color: ${({ theme, $isPercentagePositive }) =>
-        $isPercentagePositive ? theme.colors.increase : theme.colors.decrease};
-    font-weight: bold;
-`;
+import {
+    Chart,
+    Container,
+    PriceWrapper,
+    Rate,
+    RateChange,
+    Wrapper,
+} from "./styles";
 
 const calculateRate = (rates: number[]) => {
     const lastRate = rates.at(-1) ?? 0;
@@ -117,7 +91,7 @@ export const ChartSection = () => {
                         { label: "BitCoin", value: "BitCoin" },
                         { label: "Ethereum", value: "Ethereum" },
                     ]}
-                ></Select>
+                />
                 <PriceWrapper>
                     <Rate>${currentRate}</Rate>
                     <RateChange $isPercentagePositive={isPercentagePositive}>
