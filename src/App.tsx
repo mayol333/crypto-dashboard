@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { ChartSection } from "./sections/ChartSection/ChartSection";
 import { ListSection } from "./sections/ListSection/ListSection";
 import { TransactionSection } from "./sections/TransactionSection/TransactionSection";
+import { TransactionsHistorySection } from "./sections/TransactionsHistorySection/TransactionsHistorySections";
 
 const MasterWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
@@ -51,7 +52,9 @@ export const App = () => {
             <Section4>
                 <TransactionSection />
             </Section4>
-            <Section5></Section5>
+            <Section5>
+                <TransactionsHistorySection />
+            </Section5>
             <Section6></Section6>
         </MasterWrapper>
     );

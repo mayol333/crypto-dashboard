@@ -5,9 +5,10 @@ export const Button = ({
     children,
     onClick,
     mode = "primary",
+    disabled,
 }: ButtonProps) => {
     return (
-        <StyledButton $mode={mode} onClick={onClick}>
+        <StyledButton disabled={disabled} $mode={mode} onClick={onClick}>
             {children}
         </StyledButton>
     );
