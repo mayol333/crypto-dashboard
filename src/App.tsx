@@ -31,7 +31,6 @@ const Section4 = styled.div`
     grid-area: d;
 `;
 const Section5 = styled.div`
-    background-color: red;
     grid-area: e;
 `;
 const Section6 = styled.div`

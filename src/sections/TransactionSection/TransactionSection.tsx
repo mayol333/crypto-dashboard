@@ -11,7 +11,7 @@ import {
 } from "./styles";
 import { format } from "date-fns";
 
-interface WalletItem {
+export interface WalletItem {
     action: Action;
     currency: string;
     amount: string;
