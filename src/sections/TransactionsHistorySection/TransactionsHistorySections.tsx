@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { WalletItem } from "../TransactionSection/TransactionSection";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { Button } from "../../ui/Button/Button";
+import { removeItem } from "../../store/storage/storageSlice";
 
 const Container = styled.div``;
 
@@ -15,24 +17,38 @@ const ListElement = styled.li`
         background-color: ${({ theme }) => theme.colors.backgrounds.listOdd};
     }
     padding: 15px;
-    justify-content: space-between;
 `;
 
 const Action = styled.p`
-    width: 40px;
+    width: 20%;
 `;
 
-const Currency = styled.p``;
+const Currency = styled.p`
+    width: 20%;
+`;
 
-const Amount = styled.p``;
+const Amount = styled.p`
+    width: 20%;
+`;
 
-const CryptoAmount = styled.p``;
+const CryptoAmount = styled.p`
+    width: 20%;
+`;
 
-const Date = styled.p``;
+const Date = styled.p`
+    width: 20%;
+`;
+
+const Bin = styled.img`
+    width: 25px;
+`;
 
 export const TransactionsHistorySection = () => {
-    const transactions: [] = JSON.parse(localStorage.getItem("wallet") || "[]");
-    console.log(transactions);
+    const dispatch = useAppDispatch();
+    const handleDelete = (id: string) => {
+        dispatch(removeItem(id));
+    };
+    const { wallet } = useAppSelector(({ storage }) => storage);
     return (
         <Container>
             <List>
@@ -43,21 +59,21 @@ export const TransactionsHistorySection = () => {
                     <CryptoAmount>CryptoAmount</CryptoAmount>
                     <Date>Date</Date>
                 </ListElement>
-                {transactions.map(
-                    ({
-                        action,
-                        currency,
-                        amount,
-                        cryptoAmount,
-                        date,
-                    }: WalletItem) => {
+                {wallet.map(
+                    ({ action, currency, amount, cryptoAmount, date, id }) => {
                         return (
-                            <ListElement>
+                            <ListElement key={id}>
                                 <Action>{action}</Action>
                                 <Currency>{currency}</Currency>
                                 <Amount>{amount}</Amount>
                                 <CryptoAmount>{cryptoAmount}</CryptoAmount>
                                 <Date>{date}</Date>
+                                <Button
+                                    mode="secondary"
+                                    onClick={() => handleDelete(id)}
+                                >
+                                    <Bin src="../../../public/images/bin.png.png"></Bin>
+                                </Button>
                             </ListElement>
                         );
                     }

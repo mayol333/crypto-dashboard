@@ -1,7 +1,9 @@
 import { Button } from "../../ui/Button/Button";
 import { Select } from "../../ui/Select/Select";
 import { Input } from "../../ui/Input/Input";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { v4 as uuidv4 } from "uuid";
+import { setStorage } from "../../store/storage/storageSlice";
 import { ChangeEvent, useState } from "react";
 import {
     Wrapper,
@@ -17,12 +19,14 @@ export interface WalletItem {
     amount: string;
     cryptoAmount: string;
     date: string;
+    id: string;
 }
 
 type Action = "buy" | "sell" | "send";
 
 export const TransactionSection = () => {
     const { cryptoCurrencies } = useAppSelector(({ list }) => list);
+    const dispatch = useAppDispatch();
     const options = cryptoCurrencies.map((currency) => {
         return { label: currency.currencyName, value: currency.currencyName };
     });
@@ -40,7 +44,7 @@ export const TransactionSection = () => {
     const rate = cryptoCurrencies.find(
         (currency) => currency.currencyName === select
     );
-    const saveInLocalStorage = () => {
+    const saveInStorage = () => {
         const currentDate = new Date();
         const walletItem: WalletItem = {
             action: action,
@@ -48,10 +52,9 @@ export const TransactionSection = () => {
             amount: input,
             cryptoAmount: result.toFixed(2),
             date: format(currentDate, "dd:MM:yyyy"),
+            id: uuidv4(),
         };
-        const wallet = JSON.parse(localStorage.getItem("wallet") || "[]");
-        wallet.push(walletItem);
-        localStorage.setItem("wallet", JSON.stringify(wallet));
+        dispatch(setStorage(walletItem));
     };
 
     const result = Number(input) / Number(rate?.rate.substring(1));
@@ -93,7 +96,7 @@ export const TransactionSection = () => {
                     {select && result.toFixed(2)} {select}
                 </CalculateValueInUSD>
             </MoneyInputContainer>
-            <Button onClick={saveInLocalStorage} disabled={!disabledCheck}>
+            <Button onClick={saveInStorage} disabled={!disabledCheck}>
                 Process to Wallet
             </Button>
         </Wrapper>

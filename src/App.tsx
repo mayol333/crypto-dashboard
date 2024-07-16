@@ -3,6 +3,7 @@ import { ChartSection } from "./sections/ChartSection/ChartSection";
 import { ListSection } from "./sections/ListSection/ListSection";
 import { TransactionSection } from "./sections/TransactionSection/TransactionSection";
 import { TransactionsHistorySection } from "./sections/TransactionsHistorySection/TransactionsHistorySections";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 const MasterWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
@@ -39,6 +40,8 @@ const Section6 = styled.div`
 `;
 
 export const App = () => {
+    useLocalStorage();
+
     return (
         <MasterWrapper>
             <Section1>
