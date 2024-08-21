@@ -18,8 +18,11 @@ const storageSlice = createSlice({
             state.wallet = payload;
         },
         removeItem: (state, { payload }: PayloadAction<string>) => {
-            state.wallet.filter(({ id }) => id !== payload);
-            localStorage.removeItem("wallet");
+            state.wallet = state.wallet.filter(({ id }) => id !== payload);
+            const localStorageItems = localStorage.getItem("wallet") || "[]";
+            const wallet: WalletItem[] = JSON.parse(localStorageItems);
+            const updatedWallet = wallet.filter(({ id }) => id !== payload);
+            localStorage.setItem("wallet", JSON.stringify(updatedWallet));
         },
     },
 });
