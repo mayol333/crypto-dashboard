@@ -4,6 +4,7 @@ import { ListSection } from "./sections/ListSection/ListSection";
 import { TransactionSection } from "./sections/TransactionSection/TransactionSection";
 import { TransactionsHistorySection } from "./sections/TransactionsHistorySection/TransactionsHistorySections";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { FavoriteSection } from "./sections/FavoriteSection/FavoriteSection";
 
 const MasterWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.white};
@@ -25,7 +26,6 @@ const Section2 = styled.div`
     grid-area: b;
 `;
 const Section3 = styled.div`
-    background-color: red;
     grid-area: c;
 `;
 const Section4 = styled.div`
@@ -50,7 +50,9 @@ export const App = () => {
             <Section2>
                 <ListSection />
             </Section2>
-            <Section3></Section3>
+            <Section3>
+                <FavoriteSection />
+            </Section3>
             <Section4>
                 <TransactionSection />
             </Section4>
