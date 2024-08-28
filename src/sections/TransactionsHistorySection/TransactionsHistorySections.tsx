@@ -10,6 +10,7 @@ import {
     CryptoAmount,
     Bin,
     List,
+    Date,
 } from "./styles";
 
 export const TransactionsHistorySection = () => {

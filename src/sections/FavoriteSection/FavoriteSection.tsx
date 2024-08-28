@@ -15,7 +15,7 @@ import {
     Rate,
 } from "../FavoriteSection/styles";
 import { CryptoCurrency } from "../../store/list/listSlice";
-import { CryptoPanelProps } from "./types";
+import { CryptoPanelProps, Panel } from "./types";
 
 const ContainerWrapper = styled.div`
     width: 100%;
@@ -51,8 +51,21 @@ const StyledCryptoPanel = styled.div`
     align-items: center;
     justify-content: space-around;
     gap: 20px;
+    position: relative;
 `;
-const CryptoPanel = ({ avatar, name, rate }: CryptoPanelProps) => {
+
+const DeleteFavoriteCrypto = styled.span`
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+`;
+const CryptoPanel = ({
+    avatar,
+    name,
+    rate,
+    handlePanelDelete,
+}: CryptoPanelProps) => {
     return (
         <StyledCryptoPanel>
             <Avatar src={avatar} />
@@ -64,73 +77,96 @@ const CryptoPanel = ({ avatar, name, rate }: CryptoPanelProps) => {
                     <Rate>{rate}</Rate>
                 </p>
             </div>
+            <DeleteFavoriteCrypto onClick={handlePanelDelete}>
+                X
+            </DeleteFavoriteCrypto>
         </StyledCryptoPanel>
     );
 };
 
 export const FavoriteSection = () => {
-    const [panel, setPanel] = useState<CryptoCurrency[]>([]);
+    const [panel, setPanel] = useState<Panel>({
+        firstPanel: null,
+        secondPanel: null,
+        thirdPanel: null,
+        fourthPanel: null,
+    });
     const dispatch = useAppDispatch();
     const { cryptoCurrencies } = useAppSelector(({ list }) => list);
-    const handleCryptoSelect = (currency: CryptoCurrency) => {
-        if (panel.length < 4) {
-            setPanel([...panel, currency]);
-        }
-    };
     useEffect(() => {
         dispatch(getInitialList());
     }, [dispatch]);
-    const { modalOpen, handleModalOpen, handleModalClose } = useModalState();
+    const { modalOpen, handleModalOpen, handleModalClose, selectedPanelKey } =
+        useModalState();
+    const handleCryptoSelect = (currency: CryptoCurrency) => {
+        setPanel({ ...panel, [selectedPanelKey]: currency });
+    };
+    const handlePanelDelete = (key: string) => {
+        setPanel({ ...panel, [key]: null });
+    };
+    const { firstPanel, secondPanel, thirdPanel, fourthPanel } = panel;
     return (
         <ContainerWrapper>
-            {panel[0] ? (
+            {firstPanel ? (
                 <CryptoPanel
-                    avatar={panel[0].avatar}
-                    name={panel[0].currencyName}
-                    rate={panel[0].rate}
+                    avatar={firstPanel.avatar}
+                    name={firstPanel.currencyName}
+                    rate={firstPanel.rate}
+                    handlePanelDelete={() => handlePanelDelete("firstPanel")}
                 />
             ) : (
                 <Container>
-                    <OpenModalButton onClick={handleModalOpen}>
+                    <OpenModalButton
+                        onClick={() => handleModalOpen("firstPanel")}
+                    >
                         <OpenModal src="../../../public/images/plus.png.png" />
                     </OpenModalButton>
                 </Container>
             )}
-            {panel[1] ? (
+            {secondPanel ? (
                 <CryptoPanel
-                    avatar={panel[1].avatar}
-                    name={panel[1].currencyName}
-                    rate={panel[1].rate}
+                    avatar={secondPanel.avatar}
+                    name={secondPanel.currencyName}
+                    rate={secondPanel.rate}
+                    handlePanelDelete={() => handlePanelDelete("secondPanel")}
                 />
             ) : (
                 <Container>
-                    <OpenModalButton onClick={handleModalOpen}>
+                    <OpenModalButton
+                        onClick={() => handleModalOpen("secondPanel")}
+                    >
                         <OpenModal src="../../../public/images/plus.png.png" />
                     </OpenModalButton>
                 </Container>
             )}
-            {panel[2] ? (
+            {thirdPanel ? (
                 <CryptoPanel
-                    avatar={panel[2].avatar}
-                    name={panel[2].currencyName}
-                    rate={panel[2].rate}
+                    avatar={thirdPanel.avatar}
+                    name={thirdPanel.currencyName}
+                    rate={thirdPanel.rate}
+                    handlePanelDelete={() => handlePanelDelete("thirdPanel")}
                 />
             ) : (
                 <Container>
-                    <OpenModalButton onClick={handleModalOpen}>
+                    <OpenModalButton
+                        onClick={() => handleModalOpen("thirdPanel")}
+                    >
                         <OpenModal src="../../../public/images/plus.png.png" />
                     </OpenModalButton>
                 </Container>
             )}
-            {panel[3] ? (
+            {fourthPanel ? (
                 <CryptoPanel
-                    avatar={panel[3].avatar}
-                    name={panel[3].currencyName}
-                    rate={panel[3].rate}
+                    avatar={fourthPanel.avatar}
+                    name={fourthPanel.currencyName}
+                    rate={fourthPanel.rate}
+                    handlePanelDelete={() => handlePanelDelete("fourthPanel")}
                 />
             ) : (
                 <Container>
-                    <OpenModalButton onClick={handleModalOpen}>
+                    <OpenModalButton
+                        onClick={() => handleModalOpen("fourthPanel")}
+                    >
                         <OpenModal src="../../../public/images/plus.png.png" />
                     </OpenModalButton>
                 </Container>

@@ -14,8 +14,8 @@ const MasterWrapper = styled.div`
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-template-areas:
-        "a a b b c c"
-        "d e e e f f";
+        "a a a a b b"
+        "d e e e c c";
     gap: 10px;
 `;
 
@@ -33,10 +33,6 @@ const Section4 = styled.div`
 `;
 const Section5 = styled.div`
     grid-area: e;
-`;
-const Section6 = styled.div`
-    background-color: red;
-    grid-area: f;
 `;
 
 export const App = () => {
@@ -59,7 +55,6 @@ export const App = () => {
             <Section5>
                 <TransactionsHistorySection />
             </Section5>
-            <Section6></Section6>
         </MasterWrapper>
     );
 };
