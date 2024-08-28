@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { Modal } from "../../ui/Modal/Modal";
 import { useModalState } from "../../hooks/useModalState";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -7,82 +6,20 @@ import { getInitialList } from "../../store/list/listThunk";
 import { Icon } from "../../ui/Icon/Icon";
 import {
     ListElement,
-    Avatar,
-    CurrencyName,
     RateDirection,
     RateChangeValue,
     List,
+    Container,
+    ContainerWrapper,
+    OpenModal,
+    OpenModalButton,
+    Avatar,
+    CurrencyName,
     Rate,
 } from "../FavoriteSection/styles";
 import { CryptoCurrency } from "../../store/list/listSlice";
-import { CryptoPanelProps, Panel } from "./types";
-
-const ContainerWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 20px;
-`;
-
-const Container = styled.div`
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const OpenModal = styled.img`
-    height: 40px;
-    width: 40px;
-`;
-
-const OpenModalButton = styled.button`
-    cursor: pointer;
-    background-color: transparent;
-`;
-
-const StyledCryptoPanel = styled.div`
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    align-items: center;
-    justify-content: space-around;
-    gap: 20px;
-    position: relative;
-`;
-
-const DeleteFavoriteCrypto = styled.span`
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
-`;
-const CryptoPanel = ({
-    avatar,
-    name,
-    rate,
-    handlePanelDelete,
-}: CryptoPanelProps) => {
-    return (
-        <StyledCryptoPanel>
-            <Avatar src={avatar} />
-            <div>
-                <p>
-                    <CurrencyName>{name}</CurrencyName>
-                </p>
-                <p>
-                    <Rate>{rate}</Rate>
-                </p>
-            </div>
-            <DeleteFavoriteCrypto onClick={handlePanelDelete}>
-                X
-            </DeleteFavoriteCrypto>
-        </StyledCryptoPanel>
-    );
-};
+import { Panel } from "./types";
+import { CryptoPanel } from "../../components/CryptoPanel/CryptoPanel";
 
 export const FavoriteSection = () => {
     const [panel, setPanel] = useState<Panel>({

@@ -12,17 +12,7 @@ import {
     CalculateValueInUSD,
 } from "./styles";
 import { format } from "date-fns";
-
-export interface WalletItem {
-    action: Action;
-    currency: string;
-    amount: string;
-    cryptoAmount: string;
-    date: string;
-    id: string;
-}
-
-type Action = "buy" | "sell" | "send";
+import { Action, WalletItem } from "./types";
 
 export const TransactionSection = () => {
     const { cryptoCurrencies } = useAppSelector(({ list }) => list);

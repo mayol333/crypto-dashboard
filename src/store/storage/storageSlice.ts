@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { WalletItem } from "../../sections/TransactionSection/TransactionSection";
+import { WalletItem } from "../../sections/TransactionSection/types";
 
 export interface StorageState {
     wallet: WalletItem[];

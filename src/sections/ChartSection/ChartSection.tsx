@@ -18,14 +18,7 @@ import {
     RateChange,
     Wrapper,
 } from "./styles";
-
-const calculateRate = (rates: number[]) => {
-    const lastRate = rates.at(-1) ?? 0;
-    const firstRate = rates.at(0) ?? 0;
-    const difference = lastRate - firstRate;
-    const sum = (difference / firstRate) * 100;
-    return sum.toFixed(2);
-};
+import { calculateRate } from "../../utils/helpers";
 
 export const ChartSection = () => {
     const dispatch = useAppDispatch();

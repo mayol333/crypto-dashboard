@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { WalletItem } from "../sections/TransactionSection/TransactionSection";
 import { populateStorage } from "../store/storage/storageSlice";
 import { useAppDispatch } from "../store/store";
+import { WalletItem } from "../sections/TransactionSection/types";
 
 export const useLocalStorage = () => {
     const dispatch = useAppDispatch();
